@@ -1,0 +1,8 @@
+1. https://leetcode.com/problems/satisfiability-of-equality-equations/  
+2. https://leetcode.com/problems/rings-and-rods/  (Without hashmap)
+3. https://leetcode.com/problems/time-needed-to-buy-tickets/
+4. https://leetcode.com/problems/count-vowel-substrings-of-a-string/
+5. https://leetcode.com/problems/delete-node-in-a-linked-list/
+6. https://leetcode.com/problems/rotate-array/
+7. https://leetcode.com/problems/move-zeroes/
+
