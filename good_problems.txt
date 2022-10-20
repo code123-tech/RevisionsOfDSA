@@ -5,4 +5,8 @@
 5. https://leetcode.com/problems/delete-node-in-a-linked-list/
 6. https://leetcode.com/problems/rotate-array/
 7. https://leetcode.com/problems/move-zeroes/
-
+8. https://leetcode.com/problems/delete-the-middle-node-of-a-linked-list/
+9. https://practice.geeksforgeeks.org/problems/missing-number4257/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=missing-number
+10. https://practice.geeksforgeeks.org/problems/maximize-number-of-1s0905/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=maximize-number-of-1s
+11. https://practice.geeksforgeeks.org/problems/element-appearing-once2552/0?company[]=Qualcomm&company[]=Qualcomm&difficulty[]=1&page=1&query=company[]Qualcommdifficulty[]1page1company[]Qualcomm&utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=element-appearing-once
+12. https://takeuforward.org/data-structure/search-in-a-sorted-2d-matrix/

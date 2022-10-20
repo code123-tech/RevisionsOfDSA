@@ -18,6 +18,11 @@ class TreeNode:
         self.val = value
         self.left = self.right = None
 
+
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
 # Question 1
 
 
@@ -574,4 +579,84 @@ class Solution:
     N = len(nums)
     Time Complexity: O(N)
     Space Complexity: O(1)   
+'''
+
+# Question 18: Delete the Middle Node of a Linked List
+
+
+class Solution:
+    def deleteMiddle(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        if head.next is None:
+            return None
+
+        slow = head
+        fast = head
+        while fast.next and fast.next.next and fast.next.next.next:
+            slow = slow.next
+            fast = fast.next.next
+
+        slow.next = slow.next.next
+        return head
+
+
+'''
+    N = number of nodes in the linked list
+    Time Complexity: O(N)
+    Space Complexity: O(1)
+'''
+
+
+# Question 19: Integer to Roman
+class Solution:
+    def intToRoman(self, num: int) -> str:
+        digits = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1]
+        romanNum = ["M", "CM", "D", "CD", "C", "XC",
+                    "L", "XL", "X", "IX", "V", "IV", "I"]
+        string = ""
+        for i in range(len(digits)):
+            while(num >= digits[i]):
+                string += romanNum[i]
+                num -= digits[i]
+            if(num <= 0):
+                break
+        return string
+
+
+'''
+    Time Complexity: O(1)
+    Space Complexity: O(1)
+'''
+
+# Question 20: Find the element that appears once
+'''
+Given a sorted array A[] of N positive integers having all the numbers occurring exactly twice, except for one number which will occur only once. Find the number occurring only once.
+'''
+
+
+class Solution:
+    def search(self, A, N):
+        low = 0
+        high = N-1
+        while low <= high:
+            mid = (low+high)//2
+            if mid % 2 == 0:
+                if mid+1 < N and A[mid] == A[mid+1]:
+                    low = mid+2
+                elif mid-1 >= 0 and A[mid] == A[mid-1]:
+                    high = mid-2
+                else:
+                    return A[mid]
+            else:
+                if mid+1 < N and A[mid] == A[mid+1]:
+                    high = mid-1
+                elif mid-1 >= 0 and A[mid] == A[mid-1]:
+                    low = mid+1
+                else:
+                    return A[mid]
+        return -1
+
+
+'''
+    Time Complexity: O(logN)
+    Space Complexity: O(1)
 '''
