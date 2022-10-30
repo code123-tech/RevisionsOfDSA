@@ -10,3 +10,12 @@
 10. https://practice.geeksforgeeks.org/problems/maximize-number-of-1s0905/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=maximize-number-of-1s
 11. https://practice.geeksforgeeks.org/problems/element-appearing-once2552/0?company[]=Qualcomm&company[]=Qualcomm&difficulty[]=1&page=1&query=company[]Qualcommdifficulty[]1page1company[]Qualcomm&utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=element-appearing-once
 12. https://takeuforward.org/data-structure/search-in-a-sorted-2d-matrix/
+13. https://leetcode.com/problems/sort-colors/
+14. https://leetcode.com/problems/majority-element/
+15. https://leetcode.com/problems/group-anagrams/
+16. https://practice.geeksforgeeks.org/problems/stock-buy-and-sell2615/0
+17. https://leetcode.com/problems/next-permutation/
+18. https://leetcode.com/problems/longest-consecutive-sequence/
+19. https://leetcode.com/problems/rotate-image/
+20. https://leetcode.com/problems/majority-element-ii/
+21. https://leetcode.com/problems/shortest-path-in-a-grid-with-obstacles-elimination/

@@ -660,3 +660,282 @@ class Solution:
     Time Complexity: O(logN)
     Space Complexity: O(1)
 '''
+
+# Question 21: Continuous Subarray Sum
+
+
+class Solution:
+    def checkSubarraySum(self, nums: List[int], k: int) -> bool:
+        dicti = {0: -1}
+        sum_ = 0
+        for i in range(len(nums)):
+            sum_ = (sum_ + nums[i]) % k
+            if sum_ in dicti:
+                if i - dicti[sum_] > 1:
+                    return True
+
+            else:
+                dicti[sum_] = i
+
+        return False
+
+
+'''
+    N = len(nums)
+    Time Complexity: O(N)
+    Space Complexity: O(k)
+'''
+
+
+# Question 22: Image Overlap
+# Link: https://leetcode.com/problems/image-overlap/
+class Solution:
+    def largestOverlap(self, A: List[List[int]], B: List[List[int]]) -> int:
+
+        dim = len(A)
+
+        def shift_and_count(x_shift, y_shift, M, R):
+            left_shift_count, right_shift_count = 0, 0
+            for r_row, m_row in enumerate(range(y_shift, dim)):
+                for r_col, m_col in enumerate(range(x_shift, dim)):
+                    if M[m_row][m_col] == 1 and M[m_row][m_col] == R[r_row][r_col]:
+                        left_shift_count += 1
+                    if M[m_row][r_col] == 1 and M[m_row][r_col] == R[r_row][m_col]:
+                        right_shift_count += 1
+
+            return max(left_shift_count, right_shift_count)
+
+        max_overlaps = 0
+        for y_shift in range(0, dim):
+            for x_shift in range(0, dim):
+                max_overlaps = max(
+                    max_overlaps, shift_and_count(x_shift, y_shift, A, B))
+                max_overlaps = max(
+                    max_overlaps, shift_and_count(x_shift, y_shift, B, A))
+
+        return max_overlaps
+
+
+'''
+    Time Complexity: O(N^4)
+    Space Complexity: O(1)
+'''
+
+
+# Question 23: Sort Colors
+# Link: https://leetcode.com/problems/sort-colors/
+class Solution:
+    def sortColors(self, nums: List[int]) -> None:
+
+        low = 0
+        mid = 0
+        high = len(nums) - 1
+
+        while mid <= high:
+            if nums[mid] == 0:
+                nums[low], nums[mid] = nums[mid], nums[low]
+                low += 1
+                mid += 1
+            elif nums[mid] == 1:
+                mid += 1
+            else:
+                nums[mid], nums[high] = nums[high], nums[mid]
+                high -= 1
+
+
+'''
+    Time Complexity: O(N)
+    Space Complexity: O(1)
+
+'''
+
+# Question 24: Majority Element
+# Link: https://leetcode.com/problems/majority-element/
+# Similar to: Boyer-Moore Voting Algorithm
+
+
+class Solution:
+    def majorityElement(self, A, N):
+        # Your code here
+        count = 0
+        candidate = None
+        for num in A:
+            if count == 0:
+                candidate = num
+            count = (count+1 if candidate == num else count - 1)
+
+        cand_count = A.count(candidate)
+        if cand_count > N//2:
+            return candidate
+        return -1
+
+
+'''
+    Time Complexity: O(N)
+    Space Complexity: O(1)
+'''
+
+# Question 25: Group Anagrams
+# Link: https://leetcode.com/problems/group-anagrams/
+
+
+class Solution:
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+
+        def countCharacters(s):
+            count = [0]*26
+            for ch in s:
+                index = ord(ch) - 97
+                count[index] += 1
+
+            return '-'.join(map(str, count))
+
+        dicti = defaultdict(list)
+        for i in strs:
+            dicti[countCharacters(i)].append(i)
+
+        ans = []
+        for key, value in dicti.items():
+            ans.append(dicti[key])
+        return ans
+
+
+'''
+    Time Complexity: O(NK)
+    Space Complexity: O(NK)
+'''
+
+
+# Question 26: Stock buy and sell
+# Link: https://practice.geeksforgeeks.org/problems/stock-buy-and-sell2615/0
+def stockBuySell(price, n):
+    buyDay = 0
+    sellDay = 0
+    isProfitGained = False
+
+    for i in range(1, n):
+        if price[i] >= price[i-1] and price[i] != price[buyDay]:
+            sellDay += 1
+            isProfitGained = True
+        else:
+            if buyDay != sellDay:
+                print("(" + str(buyDay) + " " + str(sellDay) + ")", end=" ")
+            buyDay = i
+            sellDay = i
+
+    if buyDay != n - 1 and sellDay == n-1:
+        print("(" + str(buyDay) + " " + str(sellDay) + ")", end=" ")
+
+    if isProfitGained == False:
+        print("No Profit")
+    else:
+        print()
+
+
+'''
+    Time Complexity: O(N)
+    Space Complexity: O(1)
+'''
+
+# Question 27: Longest Consecutive Sequence
+# Link: https://leetcode.com/problems/longest-consecutive-sequence/
+
+
+class Solution:
+    def longestConsecutive(self, nums: List[int]) -> int:
+        keys = set(nums)
+        best = 0
+        for key in keys:
+            count = 0
+            if key-1 not in keys:
+                count += 1
+                y = key+1
+                while y in keys:
+                    y += 1
+                    count += 1
+                best = max(best, count)
+        return best
+
+
+'''
+    Time Complexity: O(N)
+    Space Complexity: O(N)
+'''
+
+# Question 28: Rotate image by 90 degree (Anti Clock wise)
+# Link: https://practice.geeksforgeeks.org/problems/rotate-by-90-degree-1587115621/1
+
+
+class Solution:
+    def rotateby90(self, a, n):
+        # code here
+        a.reverse()
+        for i in range(n):
+            for j in range(n-i-1):
+                a[i][j], a[n-j-1][n-i-1] = a[n-j-1][n-i-1], a[i][j]
+
+
+'''
+    Time Complexity: O(N^2)
+    Space Complexity: O(1)
+'''
+
+# Question 29: Earliest Possible Day of Full Bloom
+# Link: https://leetcode.com/problems/earliest-possible-day-of-full-bloom/
+
+
+class Solution:
+    def earliestFullBloom(self, plantTime: List[int], growTime: List[int]) -> int:
+        # if len(plantTime) == 1:
+        #     return plantTime[0] + growTime[0]
+
+        seed_grow = [[plantTime[i], growTime[i]]
+                     for i in range(len(plantTime))]
+
+        seed_grow.sort(key=lambda x: (-x[1], x[0]))
+
+        result = 0
+        current = 0
+        for seed, grow in seed_grow:
+            current += seed
+            result = max(result, current + grow)
+
+        return result
+
+
+'''
+    Time Complexity: O(NlogN)
+    Space Complexity: O(N)
+'''
+
+# Question 30: Majority Element II
+# Link: https://leetcode.com/problems/majority-element-ii/
+# intution: https://leetcode.com/problems/majority-element-ii/discuss/543672/BoyerMoore-majority-vote-algorithm-EXPLAINED
+
+
+class Solution:
+    def majorityElement(self, nums: List[int]) -> List[int]:
+        num1 = num2 = None
+        count1 = count2 = 0
+        for i in range(len(nums)):
+            if nums[i] == num1:
+                count1 += 1
+            elif nums[i] == num2:
+                count2 += 1
+            elif count1 == 0:
+                count1 = 1
+                num1 = nums[i]
+            elif count2 == 0:
+                count2 = 1
+                num2 = nums[i]
+            else:
+                count1 -= 1
+                count2 -= 1
+        real_count_num1 = nums.count(num1)
+        real_count_num2 = nums.count(num2)
+        result = []
+        if real_count_num1 > len(nums)//3:
+            result.append(num1)
+        if real_count_num2 > len(nums)//3:
+            result.append(num2)
+        return result
