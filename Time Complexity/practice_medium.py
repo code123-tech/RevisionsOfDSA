@@ -939,3 +939,368 @@ class Solution:
         if real_count_num2 > len(nums)//3:
             result.append(num2)
         return result
+
+
+'''
+    Time Complexity: O(N)
+    Space Complexity: O(1)
+'''
+# Question 31: 4Sum
+# Link: https://leetcode.com/problems/4sum/
+
+
+class Solution:
+    def fourSum(self, nums: List[int], target: int) -> List[List[int]]:
+        result = set()
+        nums.sort()
+
+        for i in range(len(nums)-2):
+            for j in range(i+1, len(nums)-2):
+                left = j + 1
+                right = len(nums) - 1
+                while left < right:
+                    curr_sum = nums[i] + nums[j] + nums[left] + nums[right]
+
+                    if curr_sum > target:
+                        right -= 1
+                    elif curr_sum < target:
+                        left += 1
+                    else:
+                        result.add((nums[i], nums[j], nums[left], nums[right]))
+                        left += 1
+                        right -= 1
+        return result
+
+
+'''
+    Time Complexity: O(N^3)
+    Space Complexity: O(N)
+'''
+
+# Question 32: Merge Intervals
+# Link: https://leetcode.com/problems/merge-intervals/
+
+
+class Solution:
+    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
+
+        intervals.sort(key=lambda x: x[0])
+        result = [intervals[0]]
+        for lst in intervals[1:]:
+            if result[-1][-1] < lst[0]:
+                result.append(lst)
+            else:
+                result[-1][-1] = max(result[-1][-1], lst[-1])
+        return result
+
+
+'''
+    Time Complexity: O(NlogN)
+    Space Complexity: O(N)
+'''
+
+# Question 33: Subsets with XOR value
+# Link: https://practice.geeksforgeeks.org/problems/subsets-with-xor-value2023/1
+
+
+class Solution:
+    def subsetXOR(self, arr, N, K):
+        # code here
+
+        @lru_cache(None)
+        def recur(index, xor):
+            if index == N:
+                return xor == K
+
+            left = recur(index+1, xor ^ arr[index])
+            right = recur(index+1, xor)
+
+            return left + right
+        return recur(0, 0)
+
+
+'''
+    Time Complexity: O(N*M)
+    Space Complexity: O(N*M)
+'''
+# Question 34: Where Will the Ball Fall
+# Link: https://leetcode.com/problems/where-will-the-ball-fall/
+
+
+class Solution:
+    def findBall(self, grid: List[List[int]]) -> List[int]:
+        rows = len(grid)
+        cols = len(grid[0])
+
+        ans = [-1]*cols
+
+        def dfs(ball, row, col):
+            if col >= cols or col < 0:
+                return
+
+            if row == rows:
+                ans[ball] = col
+                return
+
+            if (col == 0 and grid[row][col] == -1) or (col == cols-1 and grid[row][col] == 1):
+                return
+
+            if col+1 < cols and grid[row][col] == 1 and grid[row][col+1] != -1:
+                dfs(ball, row+1, col+1)
+
+            elif col-1 >= 0 and grid[row][col] == -1 and grid[row][col-1] != 1:
+                dfs(ball, row+1, col-1)
+
+        for i in range(cols):
+            dfs(i, 0, i)
+
+        return ans
+
+
+'''
+    Time Complexity: O(N^2)
+    Space Complexity: O(N)
+'''
+
+# Question 35: Merge Without Extra Space
+# Link: https://practice.geeksforgeeks.org/problems/merge-two-sorted-arrays-1587115620/1
+
+'''
+    Gap method is being used here:
+    1. firstly gap value is  (n+m)//2
+        * Compare arr1[i] and arr1[i+gap] until i+gap < n
+        * Compare arr1[i] and arr2[j] with j - i = gap  until j < m and i < n
+        * Compare arr2[j] and arr2[j+gap]   until j+gap < m
+    3. then change the gap value to gap//2
+    4. repeat the process until gap is greater than 0
+'''
+
+
+class Solution:
+
+    # Function to merge the arrays.
+    def merge(self, arr1, arr2, n, m):
+        def findGap(x):
+            if x <= 1:
+                return 0
+            return (x//2) + (x % 2)
+
+        total = n + m
+        gap = findGap(total)
+
+        while gap > 0:
+
+            # gap within first array
+            i = 0
+            while i + gap < n:
+                if arr1[i] > arr1[i+gap]:
+                    arr1[i], arr1[i+gap] = arr1[i+gap], arr1[i]
+                i += 1
+
+            # gap into both array
+            j = gap - n if gap > n else 0
+            while i < n and j < m:
+                if arr1[i] > arr2[j]:
+                    arr1[i], arr2[j] = arr2[j], arr1[i]
+
+                i += 1
+                j += 1
+
+            # gap into last array
+            if j < m:
+                j = 0
+                while j + gap < m:
+                    if arr2[j] > arr2[j+gap]:
+                        arr2[j], arr2[j+gap] = arr2[j+gap], arr2[j]
+                    j += 1
+
+            gap = findGap(gap)
+
+
+'''
+    K = n + m 
+    Time Complexity: O(KlogK)
+    Space Complexity: O(1)
+'''
+
+
+# Question 36: Find the repeating and missing number
+# Link: https://practice.geeksforgeeks.org/problems/find-missing-and-repeating2512/1
+'''
+    first approach: Iterate from 1 to n, and check if i is repeating or missing in arr
+            Time Complexity: O(N^2), Space Complexity: O(1)
+    second approach: Sorting the array, and the find missing and repeating
+            Time Complexity: O(NlogN), Space Complexity: O(1)
+    third Approach: Using counting of each element in the array
+            Time Complexity: O(N), Space Complexity: O(N)
+    fourth Approach: Using sum upto N number and sum of square upto n number
+            Time Complexity: O(N), Space Complexity: O(1)
+            Basically in this approach we are using the formula of sum of n natural number
+            and sum of square of n natural number
+            sum = n(n+1)/2
+            sum of square = n(n+1)(2n+1)/6 
+
+            1. remaining_sum =  sum - sum_of_array (remaining_sum = missing_number - repeating_number)
+            2. remaining_sum_square = sum_of_square - sum_of_square_array (remaining_sum_square = missing_number^2 - repeating_number^2)
+
+            dividing equation 2 by equation 1
+
+               (missing_number^2 - repeating_number^2) =  remaining_sum_square
+           =>  ---------------------------------------    --------------------
+               (missing_number - repeating_number) =  remaining_sum
+
+    fifth Approach: Using XOR
+            Time Complexity: O(N), Space Complexity: O(1)
+            
+'''
+
+
+class Solution:
+    def findTwoElement(self, arr, n):
+        # four approache
+        sum_n = (n*(n+1))//2
+        sum_sq = (n*(n+1)*(2*n+1))//6
+        for i in range(n):
+            sum_n -= arr[i]
+            sum_sq -= (arr[i]*arr[i])
+        miss = (sum_n + sum_sq//sum_n)//2
+        return [miss-sum_n, miss]
+
+        # fifth approach
+        xor = 0
+        # 1. find xor of all array elements
+        for i in range(n):
+            xor ^= arr[i]
+
+        # 2. find xor of all elements from 1 to n, and take its xor with above xor, so you will get
+        # X^Y = xor  (x is missing number, y is repeating number)
+        for i in range(1, n+1):
+            xor ^= i
+
+        # 3. check rightmost set bit in the X^y = xor
+        # which will tell us that either of the number has set bit of rightmost index.
+        right_most_set_bit = xor & ~(xor-1)
+        x = 0
+        y = 0
+
+        # 4. take all the number in x bucket which is having rightmost set bit.
+        # . take all number in y bucket which is not having rightmost set bit.
+        for i in range(n):
+            if arr[i] & right_most_set_bit:
+                x ^= arr[i]
+            else:
+                y ^= arr[i]
+
+        # 5. now iterate from 1 to n again, and check which number is having rightmost set bit and which is not having.
+        for i in range(1, n+1):
+            if i & right_most_set_bit:
+                x ^= i
+            else:
+                y ^= i
+
+        # 6. now you find x and y as missing or repeating number.
+        for i in range(n):
+            if arr[i] == x:
+                return [x, y]
+        return [y, x]
+
+
+'''
+    Time Complexity: O(N)
+    Space Complexity: O(1)
+'''
+
+
+# Question 37: Maximum Product Subarray
+# link: https://leetcode.com/problems/maximum-product-subarray/
+class Solution:
+    def maxProduct(self, arr: List[int]) -> int:
+        n = len(arr)
+        maxi = arr[0]
+        mini = arr[0]
+        result = arr[0]
+        for i in range(1, n):
+            c1 = maxi*arr[i]
+            c2 = mini*arr[i]
+            maxi = max(arr[i], max(c1, c2))
+            mini = min(arr[i], min(c1, c2))
+            result = max(result, maxi)
+
+        return result
+
+
+'''
+    Time Complexity: O(N)
+    Space Complexity: O(1)
+'''
+
+# Question 38: Find Peak Element
+# Link: https://leetcode.com/problems/find-peak-element/
+
+
+class Solution:
+    def findPeakElement(self, arr: List[int]) -> int:
+
+        def peakIndex(left, right):
+            mid = left + (right-left)//2
+            if ((mid == 0) or arr[mid-1] <= arr[mid]) and ((mid == len(arr)-1) or arr[mid+1] <= arr[mid]):
+                return mid
+            elif (mid > 0 and arr[mid-1] > arr[mid]):
+                return peakIndex(left, mid-1)
+            else:
+                return peakIndex(mid+1, right)
+
+        return peakIndex(0, len(arr)-1)
+
+
+'''
+    Time Complexity: O(logN)
+    Space Complexity: O(1)
+'''
+
+# Question 39: Search in Rotated Sorted Array II
+# Link: https://leetcode.com/problems/search-in-rotated-sorted-array-ii/
+
+
+class Solution:
+    def search(self, nums: List[int], key: int) -> bool:
+        n = len(nums)
+        l, h = 0, n-1
+        # Code here
+        while l <= h:
+            # To avoid duplicates
+            while l < h and nums[l] == nums[l + 1]:
+                l += 1
+            while l < h and nums[h] == nums[h - 1]:
+                h -= 1
+
+            mid = l + (h - l) // 2
+
+            if nums[mid] == key:
+                return 1
+
+            if nums[mid] >= nums[l]:
+                if nums[l] <= key < nums[mid]:
+                    h = mid - 1
+                else:
+                    l = mid + 1
+            else:
+                if nums[mid] < key <= nums[h]:
+                    l = mid + 1
+                else:
+                    h = mid - 1
+
+        return 0
+
+
+'''
+    Time Complexity: O(logN)
+    Space Complexity: O(1)
+'''
+# Question 40: Median of two sorted arrays
+# Link: https://practice.geeksforgeeks.org/problems/k-th-element-of-two-sorted-array1317/1
+
+
+class Solution:
+    def kthElement(self,  arr1, arr2, n, m, k):
+        pass    # Code here

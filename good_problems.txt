@@ -19,3 +19,16 @@
 19. https://leetcode.com/problems/rotate-image/
 20. https://leetcode.com/problems/majority-element-ii/
 21. https://leetcode.com/problems/shortest-path-in-a-grid-with-obstacles-elimination/
+22. https://leetcode.com/problems/two-sum/
+23. https://leetcode.com/problems/3sum/
+24. https://leetcode.com/problems/merge-intervals/
+25. https://practice.geeksforgeeks.org/problems/subsets-with-xor-value2023/1
+26. https://leetcode.com/problems/where-will-the-ball-fall/
+27. https://practice.geeksforgeeks.org/problems/inversion-of-array-1587115620/1
+28. https://leetcode.com/problems/maximum-product-subarray/
+29. https://leetcode.com/problems/find-peak-element/
+30. https://leetcode.com/problems/search-in-rotated-sorted-array-ii/
+31. https://practice.geeksforgeeks.org/problems/k-th-element-of-two-sorted-array1317/1
+
+
+
