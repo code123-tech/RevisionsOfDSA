@@ -1,4 +1,4 @@
-from bisect import bisect_right
+from bisect import bisect_right, bisect_left
 import copy
 from functools import lru_cache
 import heapq
@@ -1303,4 +1303,128 @@ class Solution:
 
 class Solution:
     def kthElement(self,  arr1, arr2, n, m, k):
-        pass    # Code here
+        if n > m:
+            return self.kthElement(arr2, arr1, m, n, k)
+
+        left = max(0, k - m)
+        right = min(k, n)
+        while left <= right:
+            mid1 = (left + right) >> 1   # mid1 of arr1
+            mid2 = k - mid1  # mid2 of arr2
+
+            l1 = float('-inf') if mid1 == 0 else arr1[mid1-1]
+            r1 = float('inf') if mid1 >= n else arr1[mid2]
+
+            l2 = float('-inf') if mid2 == 0 else arr2[mid2-1]
+            r2 = float('inf') if mid2 >= m else arr2[mid2]
+
+            if l1 <= r2 and l2 <= r1:
+                return max(l1, l2)
+            elif l1 > r2:
+                right = mid1 - 1
+            else:
+                left = mid1 + 1
+
+
+'''
+    Time Complexity: O(log(min(N, M)))
+    Space Complexity: O(1)
+'''
+
+# Question 41: Search in a 2D Matrix
+# Link: https://leetcode.com/problems/search-a-2d-matrix/
+
+
+class Solution:
+    def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
+        rows, cols = len(matrix), len(matrix[0])
+        row = 0
+        col = len(matrix[0])-1
+
+        while row < rows and col >= 0:
+
+            if matrix[row][col] == target:
+                return True
+            if matrix[row][col] > target:
+                col -= 1
+            else:
+                row += 1
+
+        return False
+
+
+'''
+    Time Complexity: O(N+M)
+    Space Complexity: O(1)
+'''
+
+# Question 42: Find a Peak Element II
+# Link: https://leetcode.com/problems/find-a-peak-element-ii/
+
+
+class Solution:
+    def findPeakGrid(self, mat: List[List[int]]) -> List[int]:
+        left = 0
+        right = len(mat[0]) - 1
+
+        while left <= right:
+            maxRow = 0
+            mid = left + (right-left)//2
+
+            for row in range(1, len(mat)):
+                if mat[maxRow][mid] <= mat[row][mid]:
+                    maxRow = row
+
+            isLeftBig = mid - 1 >= 0 and mat[maxRow][mid-1] >= mat[maxRow][mid]
+            isRightBig = mid + \
+                1 < len(mat[0]) and mat[maxRow][mid+1] >= mat[maxRow][mid]
+
+            if not isLeftBig and not isRightBig:
+                return [maxRow, mid]
+            elif isLeftBig:
+                right = mid - 1
+            else:
+                left = mid + 1
+
+
+'''
+    N = Number of rows
+    M = Number of columns
+    Time Complexity: O(NlogM)
+    Space Complexity: O(1)
+'''
+
+# Question 43: Median in a row-wise sorted Matrix
+# Link: https://practice.geeksforgeeks.org/problems/median-in-a-row-wise-sorted-matrix1527/1
+
+
+class Solution:
+    def median(self, matrix, R, C):
+        '''
+            As R and C are always odd, so  R*C is always odd
+            and median is always the (R*C)/2 th element when we flatter the entire matrix.
+            So, we can use binary search to find the median.
+
+            We know, that median will lie in between minimum of entire matrix and maximum of entire matrix.
+
+            So, each row is sorted. So we will check where can we fit the middle element in each row, and count the the number of elements greater than the middle element in each row. 
+            if that count is less than equal to desired_count, then we have found the median.
+        '''
+        desired_count = (R*C)//2
+        left = min([matrix[i][0] for i in range(R)])
+        right = max([matrix[i][-1] for i in range(R)])
+
+        ans = -1
+        while left <= right:
+            mid = (left + right) >> 1
+            count = 0
+            for i in range(R):
+                count += bisect_left(matrix[i], mid)
+
+            if count <= desired_count:
+                ans = mid
+                left = mid + 1
+            else:
+                right = mid - 1
+
+        return ans

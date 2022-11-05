@@ -29,6 +29,7 @@
 29. https://leetcode.com/problems/find-peak-element/
 30. https://leetcode.com/problems/search-in-rotated-sorted-array-ii/
 31. https://practice.geeksforgeeks.org/problems/k-th-element-of-two-sorted-array1317/1
-
+32. https://leetcode.com/problems/find-a-peak-element-ii/
+33. https://leetcode.com/problems/search-a-2d-matrix/
 
 
