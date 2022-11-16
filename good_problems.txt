@@ -31,5 +31,21 @@
 31. https://practice.geeksforgeeks.org/problems/k-th-element-of-two-sorted-array1317/1
 32. https://leetcode.com/problems/find-a-peak-element-ii/
 33. https://leetcode.com/problems/search-a-2d-matrix/
-
-
+34. https://leetcode.com/problems/koko-eating-bananas/
+35. https://practice.geeksforgeeks.org/problems/allocate-minimum-number-of-pages0937/1
+36. https://leetcode.com/problems/longest-common-prefix/
+37. https://leetcode.com/problems/sort-characters-by-frequency/
+38. https://leetcode.com/problems/rotate-string/
+39. https://leetcode.com/problems/roman-to-integer/
+40. https://practice.geeksforgeeks.org/problems/count-number-of-substrings4528/1
+41. https://leetcode.com/problems/longest-palindromic-substring/
+42. https://practice.geeksforgeeks.org/problems/smallest-positive-missing-number-1587115621/1
+43. https://practice.geeksforgeeks.org/problems/find-k-th-smallest-element-in-bst/1
+44. https://leetcode.com/problems/linked-list-cycle/
+45. https://leetcode.com/problems/linked-list-cycle-ii/
+46. https://leetcode.com/problems/palindrome-linked-list/
+47. https://practice.geeksforgeeks.org/problems/segregate-even-and-odd-nodes-in-a-linked-list5035/1
+48. https://leetcode.com/problems/remove-nth-node-from-end-of-list/
+49. https://leetcode.com/problems/sort-list/
+50. https://practice.geeksforgeeks.org/problems/add-1-to-a-number-represented-as-linked-list/1
+51. https://leetcode.com/problems/add-two-numbers/

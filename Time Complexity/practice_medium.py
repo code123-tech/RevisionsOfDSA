@@ -1,16 +1,17 @@
 from bisect import bisect_right, bisect_left
-import copy
+# import copy
 from functools import lru_cache
 import heapq
-from itertools import accumulate
-from optparse import Option
+# from itertools import accumulate
+# from optparse import Option
 from tokenize import String
 from typing import List, Optional
 from collections import Counter, defaultdict, deque
 from sortedcontainers import SortedDict
-import re
+# import re
 from data_structures.Trie import Trie
 from data_structures.UnionFind import UnionFind
+import math
 
 
 class TreeNode:
@@ -1418,6 +1419,7 @@ class Solution:
         while left <= right:
             mid = (left + right) >> 1
             count = 0
+
             for i in range(R):
                 count += bisect_left(matrix[i], mid)
 
@@ -1428,3 +1430,579 @@ class Solution:
                 right = mid - 1
 
         return ans
+
+
+# Question 44: Koko Eating Bananas
+# Link: https://leetcode.com/problems/koko-eating-bananas/
+class Solution:
+    def minEatingSpeed(self, piles: List[int], h: int) -> int:
+        def isHourEligible(mid):
+            sum_ = 0
+            for i in piles:
+                sum_ += (math.ceil(i/mid))
+            return sum_ <= h
+
+        left = 0
+        right = max(piles)
+        ans = -1
+        while left <= right:
+            mid = (right+left)//2
+
+            if mid == 0:
+                break
+
+            if isHourEligible(mid):
+                ans = mid
+                right = mid-1
+            else:
+                left = mid+1
+        return right if ans == -1 else ans
+
+
+'''
+    M = max(piles)
+    Time Complexity: O(NlogM)
+    Space Complexity: O(1)
+
+'''
+
+# Question 45: Allocate minimum number of pages
+# Link: https://practice.geeksforgeeks.org/problems/allocate-minimum-number-of-pages0937/1
+
+
+class Solution:
+    def findPages(self, A, N, M):
+
+        if M > N:
+            return -1
+
+        def isValid(mid):
+            student = 1
+            cur_pages = 0
+            for i in range(N):
+                cur_pages += A[i]
+                if cur_pages > mid:
+                    student += 1
+                    cur_pages = A[i]
+
+                if student > M:
+                    return False
+            return True
+
+        left = max(A)
+        right = sum(A)
+
+        result = -1
+
+        while left <= right:
+            mid = (left + right) >> 1
+
+            if isValid(mid):
+                result = mid
+                right = mid - 1
+            else:
+                left = mid + 1
+
+        return result
+
+
+'''
+    Time Complexity: O(NlogN)
+    Space Complexity: O(1)
+'''
+
+# Question 46: Longest Common Prefix
+# Link: https://leetcode.com/problems/longest-common-prefix/
+
+
+class Solution:
+    def longestCommonPrefix(self, strs: List[str]) -> str:
+        mini = len(min(strs, key=len))
+        index = 0
+        answer = ""
+        while index < mini:
+            isEqual = True
+            for i in range(len(strs)-1):
+                if strs[i][index] != strs[i+1][index]:
+                    isEqual = False
+                    break
+
+            if not isEqual:
+                break
+
+            answer += strs[0][index]
+            index += 1
+        return answer
+
+
+'''
+    mini = length of the smallest string
+    
+    Time Complexity: O(N*mini)  => O(N*N)
+    Space Complexity: O(1)
+'''
+
+# Question 47: Sort Characters By Frequency
+# Link: https://leetcode.com/problems/sort-characters-by-frequency/
+
+
+class Solution:
+    def frequencySort(self, s: str) -> str:
+        lst = list(s)
+
+        counter = Counter(lst)
+
+        def merge(arr):
+            if len(arr) <= 1:
+                return
+
+            mid = len(arr)//2
+
+            left = arr[:mid]
+            right = arr[mid:]
+            merge(left)
+            merge(right)
+
+            i = j = k = 0
+            while i < len(left) and j < len(right):
+                if counter[left[i]] > counter[right[j]]:
+                    arr[k] = left[i]
+                    k += 1
+                    i += 1
+                elif counter[left[i]] < counter[right[j]]:
+                    arr[k] = right[j]
+                    j += 1
+                    k += 1
+                else:
+                    if left[i] < right[j]:
+                        arr[k] = left[i]
+                        k += 1
+                        i += 1
+                    else:
+                        arr[k] = right[j]
+                        j += 1
+                        k += 1
+
+            while i < len(left):
+                arr[k] = left[i]
+                i += 1
+                k += 1
+
+            while j < len(right):
+                arr[k] = right[j]
+                j += 1
+                k += 1
+
+        merge(lst)
+        return "".join(lst)
+
+
+'''
+    N = length of the string
+    Time Complexity: O(NlogN)
+    Space Complexity: O(N)
+'''
+
+# Question 48: Roman Number to Integer and vice versa
+# Link: https://leetcode.com/problems/roman-to-integer/
+
+
+class Solution:
+    def romanToInt(self, string: str) -> int:
+        mapi = {'I': 1, 'V': 5, 'X': 10, 'L': 50,
+                'C': 100, 'D': 500, 'M': 1000}
+        if(len(string) == 1):
+            return mapi.get(string[0])
+
+        result = i = 0
+        while(i < len(string)):
+            if(i+1 < len(string) and mapi.get(string[i]) < mapi.get(string[i+1])):
+                result += mapi.get(string[i+1])-mapi.get(string[i])
+                i += 1
+            else:
+                result += mapi.get(string[i])
+            i += 1
+        return result
+
+
+'''
+    
+    Time Complexity: O(N)
+    Space Complexity: O(1)
+'''
+
+
+# Question 49: Longest Palindromic Substring (Without DP)
+# link: https://leetcode.com/problems/longest-palindromic-substring/
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        def lengthOfPalidrome(left, right):
+            while left >= 0 and right < len(s) and s[left] == s[right]:
+                left -= 1
+                right += 1
+
+            return s[left+1: right]
+
+        maxi = ""
+        for i in range(len(s)):
+            maxi = max(maxi, lengthOfPalidrome(i, i),
+                       lengthOfPalidrome(i, i+1), key=len)
+
+        return maxi
+
+
+'''
+    Time Complexity: O(N^2)
+    Space Complexity: O(1)
+'''
+
+# Question 50: Count number of substrings
+# Link: https://practice.geeksforgeeks.org/problems/count-number-of-substrings4528/1
+
+
+class Solution:
+    def substrCount(self, s, k):
+        ''' 
+            count = 5
+            dicti = { a: 1
+
+            S = 'abaaca' K = 2
+            left = 5
+            right = 5
+
+            1. For k = 2
+                ans = 1 + 2 + 3 + 4 + 3 + 4
+
+            2. For k = 1
+                ans = 1 + 1 + 1 + 2 + 1 + 1
+
+            upto k (s, k) -  upto(k-1)(s,k-1)
+
+
+        '''
+        def countStrings(diff):
+
+            if diff == 0:
+                return 0
+
+            left = 0
+            right = 0
+            count = 0
+            dicti = {}
+            while right < len(s):
+                if s[right] in dicti:
+                    dicti[s[right]] += 1
+                else:
+                    dicti[s[right]] = 1
+
+                while len(dicti) > diff:
+                    dicti[s[left]] -= 1
+                    if dicti[s[left]] == 0:
+                        dicti.pop(s[left])
+                    left += 1
+
+                count += right - left + 1
+                right += 1
+
+            return count
+
+        return countStrings(k) - countStrings(k-1)
+
+
+'''
+    Time Complexity: O(N)
+    Space Complexity: O(26): O(1)
+'''
+
+
+# Question 51: Smallest Positive missing number
+# Link: https://practice.geeksforgeeks.org/problems/smallest-positive-missing-number-1587115621/1
+class Solution:
+    # Function to find the smallest positive number missing from the array.
+    def missingNumber(self, arr, n):
+        # Your code here
+        index = 0
+        while index < n:
+
+            if arr[index] > 0 and arr[index] <= n and arr[index] != arr[arr[index] - 1]:
+                current_index = arr[index]-1
+                temp = arr[index]
+                arr[index] = arr[current_index]
+                arr[current_index] = temp
+            else:
+                index += 1
+
+        for i in range(n):
+            if arr[i] != (i+1):
+                return i+1
+
+        return n+1
+
+
+'''
+    Time Complexity: O(N)
+    Space Complexity: O(1)
+'''
+
+# Question 52: Linked List Cycle II
+# Link: https://leetcode.com/problems/linked-list-cycle-ii/
+
+
+class Solution:
+    def detectCycle(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        slow = fast = head
+
+        while fast and fast.next and fast.next.next:
+            slow = slow.next
+            fast = fast.next.next
+
+            if slow == fast:
+                while head != slow:
+                    head = head.next
+                    slow = slow.next
+
+                return head
+
+
+'''
+    Time Complexity: O(N)
+    Space Complexity: O(1)
+'''
+
+# Question 53: Palindrome Linked List
+# Link: https://leetcode.com/problems/palindrome-linked-list/
+
+
+class Solution:
+    def isPalindrome(self, head: Optional[ListNode]) -> bool:
+        slow, fast = head, head
+        reverse = None
+        while fast and fast.next:
+            fast = fast.next.next
+            temp = slow
+            slow = slow.next
+            temp.next = reverse
+            reverse = temp
+
+        if fast:
+            slow = slow.next
+
+        while slow and reverse and slow.val == reverse.val:
+            slow = slow.next
+            reverse = reverse.next
+
+        if reverse == None:
+            return True
+        return False
+
+
+'''
+    Time Complexity: O(N)
+    Space Complexity: O(1)
+'''
+# Question 54: Segregate even and odd nodes in a Link List
+# Link: https://practice.geeksforgeeks.org/problems/segregate-even-and-odd-nodes-in-a-linked-list5035/1
+
+
+class Solution:
+    def divide(self, N, head):
+        # code here
+        evenSt, evenEnd = None, None
+        oddSt, oddEnd = None, None
+        current = head
+        while current:
+            value = current.data
+            if value & 1:  # odd
+                if oddSt is None:
+                    oddSt = current
+                    oddEnd = current
+                    current = current.next
+                    oddEnd.next = None
+                else:
+                    oddEnd.next = current
+                    oddEnd = current
+                    current = current.next
+                    oddEnd.next = None
+            else:
+                if evenSt is None:
+                    evenSt = current
+                    evenEnd = current
+                    current = current.next
+                    evenEnd.next = None
+                else:
+                    evenEnd.next = current
+                    evenEnd = current
+                    current = current.next
+                    evenEnd.next = None
+        if evenSt is None:
+            return oddSt
+        if oddSt is None:
+            return evenSt
+        evenEnd.next = oddSt
+        return evenSt
+
+
+'''
+    Time Complexity: O(N)
+    Space Complexity: O(1)
+'''
+
+# Question 55: Remove Nth Node From End of List
+# Link: https://leetcode.com/problems/remove-nth-node-from-end-of-list/
+
+
+class Solution:
+    def removeNthFromEnd(self, head: Optional[ListNode], N: int) -> Optional[ListNode]:
+        '''
+        def recursion(node):
+            p3,p2 = None,None
+            p1 = head
+
+            while p1:
+                p3 = p2
+                p2 = p1
+                p1 = p1.next
+                p2.next = p3
+
+            return p2
+
+
+        head = recursion(head)
+        temp = head
+        prev = None
+        while temp and N-1 > 0:
+            prev = temp
+            temp = temp.next
+            N -= 1
+
+        if prev is None:
+            head = head.next
+            return recursion(head)
+
+        prev.next = temp.next
+        return recursion(head)
+        '''
+
+        def recursion(current, prev, n):
+            if current == None:
+                return None
+
+            recursion(current.next, current, n)
+            n[0] -= 1
+            if n[0] == 0:
+                if prev == None:
+                    current = current.next
+                    return current
+                prev.next = current.next
+                return prev
+            return current
+
+        return recursion(head, None, [N])
+
+
+'''
+    Time Complexity: O(N)
+    Space Complexity: O(1)
+'''
+
+# Question 56: Sort Linked List
+# Link: https://leetcode.com/problems/sort-list/
+
+
+class Solution:
+    def sortList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+
+        # middle node
+        def findMiddleNode(head):
+            slow, fast = head, head
+
+            while fast.next and fast.next.next:
+                slow, fast = slow.next, fast.next.next
+
+            return slow
+
+        def merge(left, right):
+            dummy = ListNode(0)
+            tail = dummy
+
+            while left and right:
+                if left.val <= right.val:
+                    tail.next = ListNode(left.val)
+                    left = left.next
+                else:
+                    tail.next = ListNode(right.val)
+                    right = right.next
+                tail = tail.next
+
+            while left:
+                tail.next = ListNode(left.val)
+                tail = tail.next
+                left = left.next
+
+            while right:
+                tail.next = ListNode(right.val)
+                tail = tail.next
+                right = right.next
+
+            return dummy.next
+
+        if head and head.next:
+            middle = findMiddleNode(head)
+            rightPart = middle.next
+            middle.next = None
+            return merge(self.sortList(head), self.sortList(rightPart))
+
+        return head
+
+
+'''
+    Time Complexity: O(NlogN)
+    Space Complexity: O(N)
+'''
+
+# Question 57: Add 1 to a number represented as linked list
+# Link: https://practice.geeksforgeeks.org/problems/add-1-to-a-number-represented-as-linked-list/1
+
+
+class Solution:
+    def addOne(self, head):
+        # Returns new head of linked List.
+        def reverse(head):
+            p3, p2 = None, None
+            p1 = head
+
+            while p1:
+                p3 = p2
+                p2 = p1
+                p1 = p1.next
+                p2.next = p3
+
+            return p2
+
+        head = reverse(head)
+
+        carry = 0
+        temp = head
+        prev = None
+        isFirst = True
+
+        while temp:
+            prev = temp
+            sum_ = temp.data + carry + (1 if isFirst else 0)
+            temp.data = sum_ % 10
+            carry = sum_//10
+            if carry == 0:
+                break
+            temp = temp.next
+            isFirst = False
+
+        if carry == 1:
+            prev.next = ListNode(1) 
+
+        return reverse(head)
+
+
+'''
+    Time Complexity: O(N)
+    Space Complexity: O(1)
+'''

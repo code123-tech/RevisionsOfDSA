@@ -213,34 +213,20 @@ try:
     #     return left
 
     def solve():
-        size = 5
-        arr = [3, 4, 5, 1, 1]
-        sortedarray = sorted(arr)
-        index = 1
-        i = 0
-        while index < size:
-            arr[index] = sortedarray[i]
-            i += 1
-            index += 2
-
-        index = 0
-        while index < size:
-            arr[index] = sortedarray[i]
-            i += 1
-            index += 2
-        presum = []
-        for i in range(size):
-            if i == 0:
-                presum.append(arr[i])
-            else:
-                presum.append(presum[i-1] + arr[i])
-
-        for i in range(size):
-            if i+1 == 1:
-                continue
-            else:
-                presum[i] = (((-1)**(i))*presum[i]) + presum[i-1]
-        print(presum[-1])
+        n = int(input())
+        lst = list(map(int, input().strip().split()))
+        result = [-1]*n
+        for i in range(n-2, -1, -1):
+            j = i+1
+            flag = True
+            while lst[i] > lst[j]:
+                if result[j] == -1:
+                    flag = False
+                    break
+                j = result[j] - 1
+            if flag:
+                result[i] = j + 1
+        print(*result)
     # test = int(input())
     test = 1
     count1 = 1
