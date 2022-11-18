@@ -1997,7 +1997,7 @@ class Solution:
             isFirst = False
 
         if carry == 1:
-            prev.next = ListNode(1) 
+            prev.next = ListNode(1)
 
         return reverse(head)
 
@@ -2005,4 +2005,77 @@ class Solution:
 '''
     Time Complexity: O(N)
     Space Complexity: O(1)
+'''
+
+# Question 58: Add Two Numbers
+# Link: https://leetcode.com/problems/add-two-numbers/
+
+
+class Solution:
+    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+
+        carry = 0
+        head = None
+        tail = None
+        while l1 != None or l2 != None or carry == 1:
+            current_sum = carry
+            if l1:
+                current_sum += l1.val
+                l1 = l1.next
+            if l2:
+                current_sum += l2.val
+                l2 = l2.next
+
+            newNode = ListNode(current_sum % 10)
+            if head is None:
+                tail = newNode
+                head = newNode
+            else:
+                tail.next = newNode
+                tail = tail.next
+            carry = current_sum // 10
+
+        return head
+
+
+'''
+    Time Complexity: O(N)
+    Space Complexity: O(1)
+'''
+
+# Question 59: Intersection Point in Y Shapped Linked Lists
+# Link: https://leetcode.com/problems/intersection-of-two-linked-lists/
+
+
+class Solution:
+    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> Optional[ListNode]:
+        def getLength(head):
+            count = 0
+            while head != None:
+                head = head.next
+                count += 1
+            return count
+        countA = getLength(headA)  # O(m)
+        countB = getLength(headB)  # O(n)
+
+        if countA > countB:
+            temp = countA - countB
+            while temp:               # O(m)
+                headA = headA.next
+                temp -= 1
+        else:
+            temp = countB - countA
+            while temp:               # O(n)
+                headB = headB.next
+                temp -= 1
+
+        while headA != headB:
+            headA = headA.next
+            headB = headB.next
+        return headA
+
+
+'''
+    # Time: O(m) + O(n) + Max(O(m,n))
+    # Space: O(1)
 '''
