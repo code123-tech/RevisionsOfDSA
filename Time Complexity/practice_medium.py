@@ -2079,3 +2079,202 @@ class Solution:
     # Time: O(m) + O(n) + Max(O(m,n))
     # Space: O(1)
 '''
+
+# Question 60: Reverse Nodes in k-Group
+# Link: https://leetcode.com/problems/reverse-nodes-in-k-group/
+
+
+class Solution:
+    def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
+        if head is None:
+            return head
+
+        def reverse(node):
+            p2, p3 = None, None
+            p1 = node
+            while p1:
+                p3 = p2
+                p2 = p1
+                p1 = p1.next
+                p2.next = p3
+            return p2
+
+        currentGroupLastNode = head
+        count = 1
+        while currentGroupLastNode.next and count < k:
+            count += 1
+            currentGroupLastNode = currentGroupLastNode.next
+
+        if count == k:
+            nextGroupNode = currentGroupLastNode.next
+            currentGroupLastNode.next = None
+            curentGroupNewHead = reverse(head)
+            head.next = self.reverseKGroup(nextGroupNode, k)
+            return curentGroupNewHead
+
+        return head
+
+
+'''
+    Time Complexity: O(N)
+    Space Complexity: O(1)
+'''
+
+# Question 61: Rotate List
+# Link: https://leetcode.com/problems/rotate-list/
+
+
+class Solution:
+    def rotateRight(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
+        # It is similar like array rotating by k places
+        # first reverse first length - k places
+        # then reverse last k places
+        # then reverse complete linked list.
+
+        if head is None:
+            return head
+
+        def getLength(head):
+            count = 0
+            while head:
+                count += 1
+                head = head.next
+            return count
+
+        def reverse(head):
+            p2, p3 = None, None
+            p1 = head
+            while p1:
+                p3 = p2
+                p2 = p1
+                p1 = p1.next
+                p2.next = p3
+            return p2
+
+        length = getLength(head)  # O(N)
+        k = k % length
+        firstK = length - k
+        temp = head
+        count = 1
+        while temp.next and count < firstK:  # O(N-K)
+            temp = temp.next
+            count += 1
+
+        nextgrouphead = temp.next
+        temp.next = None
+        firstNewHead = reverse(head)   # O(N-K)
+        secondNewHead = reverse(nextgrouphead)  # O(K)
+
+        head.next = secondNewHead
+
+        return reverse(firstNewHead)  # O(N)
+
+
+'''
+    Time Complexity: 2*O(N) + 2*O(N-K) + O(K)
+    Space Complexity: O(1)
+'''
+
+# Question 62: Flattening a Linked List
+# Link: https://practice.geeksforgeeks.org/problems/flattening-a-linked-list/1
+
+
+def merge(left, right):
+    head = ListNode(0)
+    tail = head
+
+    while left and right:
+        if left.val <= right.val:
+            newNode = ListNode(left.val)
+            left = left.bottom
+        else:
+            newNode = ListNode(right.val)
+            right = right.bottom
+
+        head.bottom = newNode
+        head = head.bottom
+
+    while left:
+        head.bottom = ListNode(left.val)
+        left = left.bottom
+        head = head.bottom
+
+    while right:
+        head.bottom = ListNode(right.val)
+        right = right.bottom
+        head = head.bottom
+
+    return tail.bottom
+
+
+def flatten(root):
+    # Your code here
+    if root is None:
+        return root
+    if root.next is None:
+        return root
+
+    temp = root.next.next
+
+    mergedNode = merge(root, root.next)
+    mergedNode.next = temp
+
+    return flatten(mergedNode)
+
+
+'''
+    Time Complexity: O(N*M)
+    Space Complexity: O(1)
+'''
+
+# Question 63: Copy List with Random Pointer
+# Link: https://leetcode.com/problems/copy-list-with-random-pointer/
+
+
+class Node:
+    def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None):
+        self.val = int(x)
+        self.next = next
+        self.random = random
+
+
+class Solution:
+    def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
+        if head is None:
+            return head
+
+        def clone(head):
+            current = head
+            while current:
+                newNode = Node(current.val)
+                newNode.next = current.next
+                current.next = newNode
+                current = newNode.next
+
+        def setRandom(head):
+            current = head
+            while current:
+                if current.random is not None:
+                    current.next.random = current.random.next
+                current = current.next.next
+
+        def split(head):
+            current = head
+            newHead = head.next
+            while current:
+                temp = current.next
+                current.next = temp.next
+                if temp.next is not None:
+                    temp.next = temp.next.next
+                current = current.next
+            return newHead
+
+        clone(head)
+        setRandom(head)
+        return split(head)
+
+
+'''
+    Time Complexity: O(N)
+    Space Complexity: O(1)
+'''

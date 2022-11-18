@@ -51,3 +51,6 @@
 51. https://leetcode.com/problems/add-two-numbers/
 52. https://practice.geeksforgeeks.org/problems/add-two-numbers-represented-by-linked-lists/1
 53. https://www.geeksforgeeks.org/sorting-queue-without-extra-space/
+54. https://leetcode.com/problems/reverse-nodes-in-k-group/
+55. https://practice.geeksforgeeks.org/problems/flattening-a-linked-list/1
+56. https://leetcode.com/problems/copy-list-with-random-pointer/
