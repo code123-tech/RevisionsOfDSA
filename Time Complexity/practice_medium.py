@@ -2278,3 +2278,126 @@ class Solution:
     Time Complexity: O(N)
     Space Complexity: O(1)
 '''
+
+# Question 64: Count Good Numbers
+# Link: https://leetcode.com/problems/count-good-numbers/
+
+
+class Solution:
+    def countGoodNumbers(self, n: int) -> int:
+        evenIndex = n//2 if n % 2 == 0 else n//2 + 1
+        oddIndex = n - evenIndex
+        mod = 10**9 + 7
+
+        def power(n, x):
+            if x == 0:
+                return 1
+            if x % 2 == 0:
+                return power((n*n) % mod, x >> 1)
+
+            return (n*power((n*n) % mod, (x-1) >> 1)) % mod
+        # even power result * odd_power_result
+        return ((power(5, evenIndex) % mod)*(power(4, oddIndex) % mod)) % mod
+
+
+'''
+    Time Complexity: O(log(evenIndex)) + O(log(oddIndex))
+    Space Complexity: O(1)
+'''
+
+# Question 65: Generate Parentheses
+# Link: https://practice.geeksforgeeks.org/problems/generate-all-possible-parentheses/1
+
+
+class Solution:
+    def generateParenthesis(self, n: int) -> List[str]:
+        result = []
+
+        def generate(open, close, s):
+            if open == 0 and close == 0:
+                result.append(s)
+                return
+            if open > 0:
+                generate(open-1, close, s+"(")
+            if close > open:
+                generate(open, close-1, s+")")
+
+        generate(n, n, "")
+        return result
+
+
+'''
+    Time Complexity: O(2^N)
+    Space Complexity: O(2^N) // Internal Stack 
+'''
+
+# Question 66: Combination Sum
+# Link: https://practice.geeksforgeeks.org/problems/combination-sum-1587115620/1
+
+
+class Solution:
+
+    # Function to return a list of indexes denoting the required
+    # combinations whose sum is equal to given number.
+    def combinationalSum(self, A, target):
+
+        self.result = []
+
+        def findCombinationUtil(target, index, currentList):
+            # print(target, currentList)
+            if target == 0:
+                self.result.append([*currentList])  # O(N)
+                return
+
+            if index == len(A) or target < A[index]:
+                return
+
+            currentList.append(A[index])
+            target -= A[index]
+            findCombinationUtil(target, index, currentList)
+
+            currentList.pop()
+            target += A[index]
+            findCombinationUtil(target, index+1, currentList)
+
+        A = list(set(A))  # O(N)
+
+        A.sort()  # O(NlogN)
+        findCombinationUtil(target, 0, [])  # O(2^N * N)
+
+        return self.result
+
+
+'''
+    Time Complexity: O(NlogN + 2^N*N + N) => O(2^N*N)
+    Space Complexity: O(2^N)
+'''
+
+
+class Solution:
+    def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
+
+        self.result = []
+
+        def combinationSum2Util(target, index, currentList):
+            if target == 0:
+                self.result.append(currentList)
+                return
+
+            if index == len(candidates) or target < candidates[index]:
+                return
+
+            for nextIndex in range(index, len(candidates)):
+                if nextIndex > index and candidates[nextIndex] == candidates[nextIndex-1]:
+                    continue
+                combinationSum2Util(
+                    target - candidates[nextIndex], nextIndex + 1, currentList + [candidates[nextIndex]])
+        candidates.sort()
+        combinationSum2Util(target, 0, [])
+        return self.result
+
+
+'''
+    Time Complexity: O(2^N*N)
+    Space Complexity: O(2^N)
+'''
