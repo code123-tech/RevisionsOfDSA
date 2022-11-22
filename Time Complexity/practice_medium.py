@@ -2352,12 +2352,10 @@ class Solution:
             if index == len(A) or target < A[index]:
                 return
 
-            currentList.append(A[index])
-            target -= A[index]
-            findCombinationUtil(target, index, currentList)
-
-            currentList.pop()
-            target += A[index]
+            # Element is taken and move to the same element
+            findCombinationUtil(
+                target - A[index], index, currentList + A[index])
+            # move to the next element.
             findCombinationUtil(target, index+1, currentList)
 
         A = list(set(A))  # O(N)
@@ -2372,6 +2370,9 @@ class Solution:
     Time Complexity: O(NlogN + 2^N*N + N) => O(2^N*N)
     Space Complexity: O(2^N)
 '''
+
+# Question 67: Combination Sum II
+# Link: https://leetcode.com/problems/combination-sum-ii/
 
 
 class Solution:
@@ -2400,4 +2401,132 @@ class Solution:
 '''
     Time Complexity: O(2^N*N)
     Space Complexity: O(2^N)
+'''
+
+# Question 68: Combination Sum III
+# Link: https://leetcode.com/problems/combination-sum-iii/
+
+
+class Solution:
+    def combinationSum3(self, k: int, n: int) -> List[List[int]]:
+        result = []
+
+        def backtrack(curNumber, target, curList):
+            if len(curList) > k:
+                return
+
+            if target == 0:
+                if len(curList) == k:
+                    result.append([*curList])
+                return
+
+            for nextNumber in range(curNumber, 10):
+                if target >= nextNumber:
+                    backtrack(nextNumber+1, target-nextNumber,
+                              curList + [nextNumber])
+
+        backtrack(1, n, [])
+        return result
+
+
+'''
+    Time Complexity: O(2^N*N)
+    Space Complexity: O(2^N)
+'''
+
+# Question 69: Letter Combinations of a Phone Number
+# Link: https://leetcode.com/problems/letter-combinations-of-a-phone-number/
+
+
+class Solution:
+    def letterCombinations(self, digits: str) -> List[str]:
+        self.dial = ["", "", "abc", "def", "ghi",
+                     "jkl", "mno", "pqrs", "tuv", "wxyz"]
+        self.result = []
+
+        if len(digits) == 0:
+            return self.result
+
+        def recursion(index, curString):
+            if index == len(digits):
+                self.result.append(curString)
+                return
+
+            alphabet = self.dial[int(digits[index])]
+
+            for i in range(len(alphabet)):
+                recursion(index + 1, curString + alphabet[i])
+
+        recursion(0, "")
+        return self.result
+
+
+'''
+    Time Complexity: O(4^N)
+    Space Complexity: O(4^N)
+'''
+# Question 70: Subsets II
+# Link: https://leetcode.com/problems/subsets-ii/
+
+
+class Solution:
+    def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
+        self.lst = []
+
+        def recursion(index, curList):
+            self.lst.append(curList)
+
+            for i in range(index, len(nums)):
+
+                if i > index and nums[i] == nums[i-1]:
+                    continue
+
+                recursion(i + 1, curList + [nums[i]])
+
+        nums.sort()
+        recursion(0, [])
+        return self.lst
+
+
+'''
+    Time Complexity: O(2^N) + O(N) // O(N) for adding the list into result 
+    Space Complexity: O(2^N)*O(K)  + O(N) // O(N) is auxiliary space taken by recursion.
+'''
+# Question 71: https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
+# Link: https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
+
+
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+
+        self.result = None
+
+        if p.val > q.val:
+            temp = p
+            p = q
+            q = temp
+
+        def recursion(node):
+            if node is None:
+                return False
+
+            if node.val >= p.val and node.val <= q.val:
+                self.result = node
+                return True
+
+            if p.val <= node.val and q.val <= q.val:
+                if (recursion(node.left)):
+                    return True
+                return False
+            if recursion(node.right):
+                return True
+            return False
+
+        recursion(root)
+        return self.result
+
+
+'''
+    Time Complexity: O(N)
+    Space Complexity: O(1)
 '''
