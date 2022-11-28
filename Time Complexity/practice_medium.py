@@ -2530,3 +2530,76 @@ class Solution:
     Time Complexity: O(N)
     Space Complexity: O(1)
 '''
+
+# Question 72:  Palindrome Partitioning
+# Link: https://leetcode.com/problems/palindrome-partitioning/
+
+
+class Solution:
+    def palind(self, i, j, string):
+        return self.dicti.setdefault((i, j), string[i:j] == string[i:j][::-1])
+
+    def dfs(self, string, length, i, part):
+        if i == length:
+            self.result.append(part)
+
+        for j in range(i+1, length+1):
+            if self.palind(i, j, string):
+                self.dfs(string, length, j, part + [string[i:j]])
+
+    def partition(self, s: str) -> List[List[str]]:
+        self.result = []
+        self.dicti = {}
+        self.dfs(s, len(s), 0, [])
+        return self.result
+
+
+'''
+    Time Complexity: O(N*2^N)
+    Space Complexity: O(N*2^N)
+'''
+
+# Question 73:  Word Search
+# Link: https://leetcode.com/problems/word-search/
+
+
+class Solution:
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        # first optimization: check which letter occurs higher times, first letter of word or last letter of word
+        counts = Counter(sum(board, []))
+        if counts[word[0]] > counts[word[-1]]:
+            word = word[::-1]
+
+        # second optimization: check every character count of word exist in counts
+        for key, val in Counter(word).items():
+            if counts[key] < val:
+                return False
+
+        Directions = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+
+        def dfs(i, j, index):
+
+            if index == len(word):
+                return True
+
+            char = board[i][j]
+            board[i][j] = "#"
+
+            for ii, jj in Directions:
+                nextI, nextJ = i + ii, j + jj
+                if nextI >= 0 and nextI < len(board) and nextJ >= 0 and nextJ < len(board[0]) and board[nextI][nextJ] != "#" and board[nextI][nextJ] == word[index] and dfs(nextI, nextJ, index+1):
+                    return True
+            board[i][j] = char
+            return False
+
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                if board[i][j] == word[0] and dfs(i, j, 1):
+                    return True
+        return False
+
+
+'''
+    Time Complexity: O(N*M*4^L)
+    Space Complexity: O(L)
+'''

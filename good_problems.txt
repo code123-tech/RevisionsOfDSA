@@ -65,3 +65,7 @@
 64. https://leetcode.com/problems/letter-combinations-of-a-phone-number/
 65. https://leetcode.com/problems/subsets-ii/
 66. https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
+67. https://leetcode.com/problems/palindrome-partitioning/
+68. https://leetcode.com/problems/word-search/
+69. https://leetcode.com/problems/arithmetic-slices-ii-subsequence/
+
