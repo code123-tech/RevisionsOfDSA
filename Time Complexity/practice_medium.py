@@ -2603,3 +2603,65 @@ class Solution:
     Time Complexity: O(N*M*4^L)
     Space Complexity: O(L)
 '''
+
+# Question 74:  Rat in a Maze Problem - I
+# Link: https://practice.geeksforgeeks.org/problems/rat-in-a-maze-problem/1
+
+
+class Solution:
+    def findPath(self, matrix, n):
+        # code here
+        def isValidCell(x, y):
+            return 0 <= x < n and 0 <= y < n and matrix[x][y] == 1
+
+        def possiblePaths(x, y, path):
+            if not isValidCell(x, y):
+                return
+
+            if x == n-1 and y == n-1:
+                result.append(path)
+                return
+
+            matrix[x][y] = 2
+            possiblePaths(x + 1, y, path + 'D')
+            possiblePaths(x - 1, y, path + 'U')
+            possiblePaths(x, y + 1, path + 'R')
+            possiblePaths(x, y - 1, path + 'L')
+            matrix[x][y] = 1
+
+        result = []
+        possiblePaths(0, 0, "")
+        return result
+
+
+'''
+    Time Complexity: O(4^N)
+    Space Complexity: O(L*X)  // L = length of path, X = number of paths  
+'''
+
+# Question 75: word break
+# Link: https://leetcode.com/problems/word-break/
+
+
+class Solution:
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        wordSet = set(wordDict)
+
+        @lru_cache(None)
+        def recur(i):
+            if i == len(s):
+                return True
+
+            for j in range(i+1, len(s)+1):
+                word = s[i:j]
+                if word in wordDict and recur(j):
+                    return True
+            return False
+
+        return recur(0)
+
+
+'''
+    Time Complexity: O(N^2)
+    Space Complexity: O(N)
+'''

@@ -68,4 +68,5 @@
 67. https://leetcode.com/problems/palindrome-partitioning/
 68. https://leetcode.com/problems/word-search/
 69. https://leetcode.com/problems/arithmetic-slices-ii-subsequence/
+70. https://practice.geeksforgeeks.org/problems/rat-in-a-maze-problem/1
 
