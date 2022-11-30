@@ -2654,7 +2654,7 @@ class Solution:
 
             for j in range(i+1, len(s)+1):
                 word = s[i:j]
-                if word in wordDict and recur(j):
+                if word in wordSet and recur(j):
                     return True
             return False
 
@@ -2665,3 +2665,105 @@ class Solution:
     Time Complexity: O(N^2)
     Space Complexity: O(N)
 '''
+
+# Question 76:  M coloring Problem
+# Link: https://practice.geeksforgeeks.org/problems/m-coloring-problem-1587115620/1
+
+
+def graphColoring(graph, number_of_colors, vertices):
+    # Your code here
+
+    def isSafeToColor(color, node):
+        for i in range(vertices):
+            if graph[node][i] == 1 and coloredNodes[i] == color:
+                return False
+        return True
+
+    def checkIfColoringIsPossible(initial):
+        if initial == vertices:
+            return True
+
+        # Each Time traversing M times. At current node, M branches are cutting, but using backtracking to check which branch is safest to go.
+        # At current node, i will check for each color, that which color is safest to color for the current node, so that it does not match with its adjacent node's color.
+        for color in range(1, number_of_colors+1):
+            if isSafeToColor(color, initial):
+                coloredNodes[initial] = color
+                if checkIfColoringIsPossible(initial + 1):
+                    return True
+                coloredNodes[initial] = 0
+
+        return False
+
+    coloredNodes = [0]*(vertices)
+    return checkIfColoringIsPossible(0)  # initial_node
+
+
+'''
+    M = number_of_colors  
+    N = vertices
+    Time Complexity: O(M^N)
+    Space Complexity: O(N)
+'''
+
+# Question 77:  Sudoku Solver
+# Link: https://leetcode.com/problems/sudoku-solver/
+
+
+class Solution:
+    # Function to find a solved Sudoku.
+    def SolveSudoku(self, grid):
+        def isRowSafe(i, j, number):
+            for col in range(9):
+                if grid[i][col] == number:
+                    return False
+            return True
+
+        def isColSafe(i, j, number):
+            for row in range(9):
+                if grid[row][j] == number:
+                    return False
+            return True
+
+        def isSubBoxSafe(i, j, number):
+            startI, startJ = (i//3)*3, (j//3)*3
+            for x in range(startI, startI+3):
+                for y in range(startJ, startJ+3):
+                    if grid[x][y] == number:
+                        return False
+            return True
+
+        def findNextEmptySlot(grid):
+            for i in range(9):
+                for j in range(9):
+                    if grid[i][j] == 0:
+                        return i, j
+            return -1, -1
+
+        def backtrack(grid):
+            x, y = findNextEmptySlot(grid)
+            if x == -1:
+                return True
+
+            for k in range(1, 10):
+                if isRowSafe(x, y, k) and isColSafe(x, y, k) and isSubBoxSafe(x, y, k):
+                    grid[x][y] = k
+                    if backtrack(grid):
+                        return True
+                    grid[x][y] = 0
+            return False
+
+        return backtrack(grid)
+
+
+'''
+    Time Complexity: O(9^(N*N))
+    Space Complexity: O(N*N)
+'''
+
+# Question 78: Expression Add Operators
+# Link: https://leetcode.com/problems/expression-add-operators/
+
+
+class Solution:
+    def addOperators(self, num: str, target: int) -> List[str]:
+        pass
