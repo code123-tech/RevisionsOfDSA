@@ -72,4 +72,6 @@
 71. https://practice.geeksforgeeks.org/problems/m-coloring-problem-1587115620/1
 72. https://leetcode.com/problems/sudoku-solver/
 73. https://leetcode.com/problems/expression-add-operators/
+74. https://leetcode.com/problems/permutations/
+75. https://leetcode.com/problems/permutations-ii/
 

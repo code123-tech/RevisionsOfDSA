@@ -2766,4 +2766,114 @@ class Solution:
 
 class Solution:
     def addOperators(self, num: str, target: int) -> List[str]:
-        pass
+
+        def backtrack(cur_idx, cur_expression, cur_sum, prev_num):
+            if cur_idx == len(num):
+                if cur_sum == target:
+                    result.append(cur_expression)
+
+                return
+
+            for i in range(cur_idx, len(num)):
+                cur_str = num[cur_idx: i+1]
+                cur_num = int(cur_str)
+                if not cur_expression:
+                    backtrack(i+1, cur_str, cur_num, cur_num)
+                else:
+                    backtrack(i+1, cur_expression + "+" +
+                              cur_str, cur_sum+cur_num, cur_num)
+                    backtrack(i+1, cur_expression + "-" +
+                              cur_str, cur_sum-cur_num, -cur_num)
+                    backtrack(i+1, cur_expression + "*" + cur_str,
+                              cur_sum-prev_num+cur_num*prev_num, cur_num*prev_num)
+
+                if num[cur_idx] == "0":
+                    break
+
+        result = []
+        backtrack(0, "", 0, 0)  # (cur_index, cur_expression, cur_sum, cur_num)
+        return result
+
+
+'''
+    Time Complexity: O(4^N)
+    Space Complexity: O(N)
+'''
+
+# Question 79: Permutations
+# Link: https://leetcode.com/problems/permutations/
+
+
+class Solution:
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        def recursion(start):
+            if start == len(nums):
+                result.append(nums[:])
+            for i in range(start, len(nums)):
+                nums[i], nums[start] = nums[start], nums[i]
+                recursion(start+1)
+                nums[i], nums[start] = nums[start], nums[i]
+
+        result = []
+        recursion(0)
+        return result
+
+        '''
+            Below one is of extra space for Visited 
+        '''
+        '''
+            def recursion(tempList, visited):
+                if len(tempList) == len(nums):
+                    result.append(tempList[:])
+                    return
+
+                for i in range(len(nums)):
+                    if visited[i]:
+                        continue
+
+                    visited[i] = True
+                    recursion(tempList + [nums[i]], visited)
+                    visited[i] = False
+
+            result = []
+            visited = [False]*len(nums)
+            recursion([], visited)
+            return result
+        '''
+
+
+'''
+    Time Complexity: O(N!)
+    Space Complexity: O(N)
+'''
+# Question 80: Permutations II
+# Link: https://leetcode.com/problems/permutations-ii/
+
+
+class Solution:
+    def permuteUnique(self, nums: List[int]) -> List[List[int]]:
+
+        def recursion(tempList, visited):
+            if len(tempList) == len(nums):
+                result.append(tempList[:])
+                return
+
+            for i in range(len(nums)):
+                if visited[i] or (i > 0 and nums[i] == nums[i-1] and not visited[i-1]):
+                    continue
+
+                visited[i] = True
+                recursion(tempList + [nums[i]], visited)
+                visited[i] = False
+
+        result = []
+        nums.sort()
+        visited = [False]*len(nums)
+        recursion([], visited)
+        return result
+
+
+'''
+    Time Complexity: O(N!)
+    Space Complexity: O(N)
+'''
