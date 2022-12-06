@@ -2877,3 +2877,74 @@ class Solution:
     Time Complexity: O(N!)
     Space Complexity: O(N)
 '''
+
+
+# Question 81:  Division without using multiplication, division and mod operator
+# Link: https://practice.geeksforgeeks.org/problems/division-without-using-multiplication-division-and-mod-operator/0
+class Solution:
+    def divide(self, dividend, divisor):
+        # code here
+        INT_MIN = -2147483647 - 1
+        INT_MAX = 2147483647
+        if dividend == INT_MIN and divisor == -1:
+            return INT_MAX
+
+        dvd = abs(dividend)
+        dvs = abs(divisor)
+        ans = 0
+        sign = -1 if ((dividend > 0) ^ (divisor > 0)) else 1
+
+        while dvd >= dvs:
+            temp = dvs
+            steps = 1
+
+            while temp << 1 <= dvd:
+                temp <<= 1
+                steps <<= 1
+
+            dvd -= temp
+            ans += steps
+
+        return sign*ans
+
+
+'''
+    Time Complexity: O(logN)
+    Space Complexity: O(1)
+'''
+
+
+# Question 82:  Prime Factorization using Sieve
+# Link: https://practice.geeksforgeeks.org/problems/prime-factorization-using-sieve/1
+class Solution:
+    def __init__(self):
+        self.number = 100100
+        self.primes = [i for i in range(self.number)]
+
+    def sieve(self):
+        start = 2
+        while start*start <= self.number:
+            if self.primes[start] == start:
+                for j in range(start*start, self.number, start):
+                    if self.primes[j] == j:
+                        self.primes[j] = start
+
+            start += 1
+
+    def findPrimeFactors(self, N):
+        # Code here
+
+        result = []
+
+        while N != 1:
+            result.append(self.primes[N])
+            N = N//self.primes[N]
+
+        result.sort()
+        return result
+
+
+'''
+    Time Complexity: O(NloglogN)
+    Space Complexity: O(N)
+'''
